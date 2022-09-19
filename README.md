@@ -15,8 +15,9 @@ pnpm install
 ## Usage
 
 ```bash
-pnpm exec prisma db seed # seed database
-pnpm run dev # run in development mode
+pnpm run db:migrate-dev # setup database
+pnpm run db:seed        # seed database
+pnpm run dev            # run in development mode
 ```
 
 ## Contributing

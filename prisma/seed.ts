@@ -4,6 +4,8 @@ import { fetch } from "next/dist/compiled/@edge-runtime/primitives/fetch";
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.cat.deleteMany();
+
   const requests = Array(10)
     .fill("https://aws.random.cat/meow")
     .map((url) => fetch(url));

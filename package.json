@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint:fix": "next lint --fix --ext .ts,tsx --ignore-path .gitignore .",
-    "prettier:write": "prettier -u --write \"{,!(node_modules)/**/}*.{ts,tsx,css,html}\"",
+    "prettier:write": "prettier -u --write \"*.{ts,tsx,css,html}\" --ignore-path .gitignore",
     "postinstall": "prisma generate",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "db:migrate-dev": "pnpm exec prisma db migrate-dev",
+    "db:seed": "pnpm exec prisma db seed"
   },
   "dependencies": {
     "@prisma/client": "^4.2.1",
@@ -25,6 +27,8 @@
     "zod": "^3.18.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
@@ -43,7 +47,7 @@
   "ct3aMetadata": {
     "initVersion": "5.7.0"
   },
-    "prisma": {
-      "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }
