@@ -1,10 +1,21 @@
 import type { NextPage } from "next";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const { data: cat } = trpc.useQuery(["cat.random"]);
+
+  const mutation = trpc.useMutation(["cat.create"]);
+
+  const handleSubmit = (event: FormEvent): void => {
+    event.preventDefault();
+    mutation.mutate({ imageUrl });
+    setImageUrl("");
+  };
+
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   return (
     <div style={{ display: "grid", placeItems: "center" }}>
@@ -34,6 +45,43 @@ const Home: NextPage = () => {
           </div>
         </section>
       </div>
+
+      <section style={{ marginTop: "1em" }}>
+        <form action="POST">
+          <label>
+            Image URL:
+            <input
+              name="imageUrl"
+              type="text"
+              value={imageUrl}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setImageUrl(event.target.value)
+              }
+            />
+          </label>
+          <>
+            {mutation.isLoading ? (
+              "Adding cat image..."
+            ) : (
+              <>
+                {mutation.isError ? (
+                  <div>An error occurred: {mutation.error.message}</div>
+                ) : null}
+
+                {mutation.isSuccess ? <div>Cat image added!</div> : null}
+
+                <button
+                  disabled={mutation.isLoading}
+                  type="submit"
+                  onClick={handleSubmit}
+                >
+                  Save
+                </button>
+              </>
+            )}
+          </>
+        </form>
+      </section>
     </div>
   );
 };

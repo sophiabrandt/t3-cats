@@ -1,5 +1,6 @@
 import { createRouter } from "./context";
 import { Cat } from "@prisma/client";
+import { z } from "zod";
 
 export const catRouter = createRouter()
   .query("random", {
@@ -14,5 +15,16 @@ export const catRouter = createRouter()
   .query("getAll", {
     async resolve({ ctx }) {
       return await ctx.prisma.cat.findMany();
+    },
+  })
+  .mutation("create", {
+    input: z.object({ imageUrl: z.string().nullish() }),
+    async resolve({ input, ctx }) {
+      const newCat = await ctx.prisma.cat.create({
+        data: {
+          imageUrl: input.imageUrl ?? "",
+        },
+      });
+      console.log(newCat);
     },
   });

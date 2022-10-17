@@ -10,7 +10,6 @@
     "prettier:write": "prettier -u --write \"*.{ts,tsx,css,html}\" --ignore-path .gitignore",
     "postinstall": "prisma generate",
     "prepare": "husky install",
-    "db:migrate-dev": "pnpm exec prisma db migrate-dev",
     "db:seed": "pnpm exec prisma db seed"
   },
   "dependencies": {
