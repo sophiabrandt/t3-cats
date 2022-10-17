@@ -26,5 +26,6 @@ export const catRouter = createRouter()
         },
       });
       console.log(newCat);
+      return newCat;
     },
   });

@@ -1,13 +1,21 @@
 import type { NextPage } from "next";
-import { ChangeEvent, FormEvent, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useQueryClient } from "react-query";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const { data: cat } = trpc.useQuery(["cat.random"]);
+  const queryClient = useQueryClient();
+  const { data: cat } = trpc.useQuery(["cat.random"], {
+    refetchInterval: 5000,
+  });
 
-  const mutation = trpc.useMutation(["cat.create"]);
+  const mutation = trpc.useMutation(["cat.create"], {
+    onSuccess: (data) => {
+      queryClient.setQueryData(["cat.random"], data);
+    },
+  });
 
   const handleSubmit = (event: FormEvent): void => {
     event.preventDefault();
@@ -67,9 +75,6 @@ const Home: NextPage = () => {
                 {mutation.isError ? (
                   <div>An error occurred: {mutation.error.message}</div>
                 ) : null}
-
-                {mutation.isSuccess ? <div>Cat image added!</div> : null}
-
                 <button
                   disabled={mutation.isLoading}
                   type="submit"
